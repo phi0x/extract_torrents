@@ -61,3 +61,5 @@ subdirectory structure than their downloaded files.
                 Default: "$OutputBaseDir"
               
     -h          Display this help
+
+    Use for all intensive purposes: ./extract_torrents.sh -a -x
