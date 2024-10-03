@@ -1,8 +1,8 @@
 #!/bin/bash
 #--Default configuration data: modify for your installation
-SessionDir="/YOUR_PATH_TO_RTORRENT_SESSION_FOLDER/config/rtorrent/session/"
-DownloadDir="COPY_FROM_RTORRENT_CONFIG_FILE"
-OutputBaseDir="/PATH_TO_EXTRACT_TORRENTS_WHERE_YOU_WANT_OUTPUTTED_TORRENTS/extract_torrents/torrents/"
+SessionDir="/docker/torrentvpn-3/config/rtorrent/session/"
+DownloadDir="/pool/"
+OutputBaseDir="/home/seedbox/extract_torrents/torrents/"
 #------------------USAGE HELP------------------------------------------------->
 function usage {
         cat <<EOM
@@ -159,13 +159,22 @@ do
         TorrName="$DownName.torrent"
   fi
 # --execute the mkdir/cp commands if -x, or just explain what will do
-  if [ $execute -eq 1 ]; then
-        printf "o"
-        mkdir -p "$OutputPath"
+if [ $execute -eq 1 ]; then
+    printf "o"
+    mkdir -p "$OutputPath"
+    if [ $? -eq 0 ]; then
         cp "$torfile" "$OutputPath/$TorrName"
-  else
-        printf "\ncp $HashName to $OutputPath/$TorrName"
-  fi
+        if [ $? -eq 0 ]; then
+            echo "Successfully copied $HashName to $OutputPath/$TorrName"
+        else
+            echo "Failed to copy $HashName to $OutputPath/$TorrName"
+        fi
+    else
+        echo "Failed to create directory $OutputPath"
+    fi
+else
+    printf "\ncp $HashName to $OutputPath/$TorrName"
+fi
 done
 
 echo
